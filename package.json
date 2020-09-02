@@ -1,0 +1,27 @@
+{
+  "name": "webapp-starter",
+  "version": "2.0.0",
+  "description": "",
+  "main": "server.js",
+  "dependencies": {
+    "@firebase/app": "^0.6.10",
+    "@firebase/firestore": "^1.16.6",
+    "@line/bot-sdk": "^7.0.0",
+    "cors": "^2.8.5",
+    "express": "^4.17.1",
+    "firebase-admin": "^9.1.1",
+    "moment": "^2.27.0",
+    "morgan": "^1.10.0",
+    "randomstring": "^1.1.5",
+    "request": "^2.88.2",
+    "vue-firestore": "^0.3.30"
+  },
+  "devDependencies": {
+    "nodemon": "^2.0.4"
+  },
+  "scripts": {
+    "server": "nodemon server.js"
+  },
+  "author": "",
+  "license": "ISC"
+}
