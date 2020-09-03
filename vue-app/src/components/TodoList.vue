@@ -28,7 +28,7 @@
           class="checkbox"
           type="checkbox"
           v-model="todo.completed"
-          @click="todo.checkboxStatus = true"
+          @click="statusUncomplete(todo)"
           v-if="!todo.complete && !todo.checkboxStatus"
         />
         &nbsp; &nbsp;
@@ -52,13 +52,13 @@
 
     <div class="complete">
       <h2>Todo Complete</h2>
-      <div class="donetodo" v-for="(todo) in todos" :key="todo.id">
+      <div class="donetodo" v-for="todo in todos" :key="todo.id">
         <input
           id="checkbox"
           class="checkbox"
           type="checkbox"
           checked="true"
-          @click="todo.checkboxStatus = false"
+          @click="statusComplete(todo)"
           v-if="todo.checkboxStatus"
         />
         <div v-if="todo.checkboxStatus" style="display:inline">
@@ -86,22 +86,7 @@ export default {
       newTodo: '',
       idForTodo: 3,
       beforeEdit: '',
-      todos: [
-        // {
-        //   id: 1,
-        //   title: 'homework1',
-        //   completed: false,
-        //   editing: false,
-        //   checkboxStatus: false,
-        // },
-        // {
-        //   id: 2,
-        //   title: 'homework2',
-        //   completed: false,
-        //   editing: false,
-        //   checkboxStatus: false,
-        // },
-      ],
+      todos: [],
     }
   },
   firestore() {
@@ -132,12 +117,27 @@ export default {
       this.$firestore.todos.doc(todo['.key']).delete()
     },
     editTodo(todo) {
-      // this.beforeEdit = todo.title
-      // todo.editing = true
-      this.$firestore.todos.doc(todo['.key']).update()
+      // db.collection('todos')
+      //   .doc(todo.id)
+      //   .set({
+      //     id: todo.id,
+      //     title: todo.title,
+      //     completed: false,
+      //     editing: false,
+      //     checkboxStatus: false,
+      //   })
+      //   .then(() => {
+      //     context.commit('editTodo', todo)
+      //   })
+
+      this.beforeEdit = todo.title
+      todo.editing = true
     },
     doneEdit(todo) {
       // ถ้าแก้ไขโดยลบทั้งหมด จะกลายเป็นค่าเดิมก่อนแก้ไข
+      this.$firestore.todos.doc(todo['.key']).update({
+        title: todo.title,
+      })
       if (todo.title.length === 0) {
         todo.title = this.beforeEdit
       }
@@ -146,6 +146,18 @@ export default {
     cancelEdit(todo) {
       todo.title = this.beforeEdit
       todo.editing = false
+    },
+    statusComplete(todo) {
+      this.$firestore.todos.doc(todo['.key']).update({
+        checkboxStatus: false,
+      })
+      // todo.checkboxStatus = false
+    },
+    statusUncomplete(todo) {
+      this.$firestore.todos.doc(todo['.key']).update({
+        checkboxStatus: true,
+      })
+      // todo.checkboxStatus = true
     },
   },
 }
