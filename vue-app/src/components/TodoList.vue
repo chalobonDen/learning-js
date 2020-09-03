@@ -117,27 +117,15 @@ export default {
       this.$firestore.todos.doc(todo['.key']).delete()
     },
     editTodo(todo) {
-      // db.collection('todos')
-      //   .doc(todo.id)
-      //   .set({
-      //     id: todo.id,
-      //     title: todo.title,
-      //     completed: false,
-      //     editing: false,
-      //     checkboxStatus: false,
-      //   })
-      //   .then(() => {
-      //     context.commit('editTodo', todo)
-      //   })
-
       this.beforeEdit = todo.title
       todo.editing = true
     },
     doneEdit(todo) {
-      // ถ้าแก้ไขโดยลบทั้งหมด จะกลายเป็นค่าเดิมก่อนแก้ไข
+      
       this.$firestore.todos.doc(todo['.key']).update({
         title: todo.title,
       })
+      // ถ้าแก้ไขโดยลบทั้งหมด จะกลายเป็นค่าเดิมก่อนแก้ไข
       if (todo.title.length === 0) {
         todo.title = this.beforeEdit
       }
